@@ -1,4 +1,4 @@
-package kafka
+package service
 
 import (
 	"encoding/json"
@@ -6,18 +6,18 @@ import (
 	"github.com/Shopify/sarama"
 )
 
-type KafkaEventProducer interface {
+type KafkaEventService interface {
 	Produce(event interface{}) error
 	Close()
 }
 
-type DefaultKafkaEventProducer struct {
+type DefaultKafkaEventService struct {
 	brokerHosts []string
 	topic       string
 	producer    sarama.SyncProducer
 }
 
-func NewKafkaEventProducer(brokerHosts []string, topic string) KafkaEventProducer {
+func NewKafkaEventService(brokerHosts []string, topic string) KafkaEventService {
 	config := sarama.NewConfig()
 	config.Producer.RequiredAcks = sarama.WaitForAll
 	config.Producer.Retry.Max = 5
@@ -27,14 +27,14 @@ func NewKafkaEventProducer(brokerHosts []string, topic string) KafkaEventProduce
 		// Should not reach here
 		panic(err)
 	}
-	return &DefaultKafkaEventProducer{
+	return &DefaultKafkaEventService{
 		brokerHosts: brokerHosts,
 		topic:       topic,
 		producer:    producer,
 	}
 }
 
-func (k *DefaultKafkaEventProducer) Produce(event interface{}) error {
+func (k *DefaultKafkaEventService) Produce(event interface{}) error {
 	bytes, err := json.Marshal(event)
 	if err != nil {
 		return err
@@ -54,7 +54,7 @@ func (k *DefaultKafkaEventProducer) Produce(event interface{}) error {
 	return nil
 }
 
-func (k *DefaultKafkaEventProducer) Close() {
+func (k *DefaultKafkaEventService) Close() {
 	if err := k.producer.Close(); err != nil {
 		// Should not reach here
 		panic(err)

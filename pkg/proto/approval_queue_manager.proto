@@ -4,6 +4,10 @@ option go_package = "github.com/aman-bansal/approval-queue/pkg/grpc";
 service ApprovalQueueManager {
     rpc Create (CreateRequest) returns (CreateResponse) {
     }
+
+    rpc Update (UpdateRequest) returns (UpdateResponse) {
+
+    }
     rpc Get (GetRequest) returns (GetResponse) {
     }
     rpc Search (SearchRequest) returns (SearchResponse) {
@@ -17,15 +21,28 @@ message CreateRequest {
     string resource_id = 2;
     string resource_type = 3;
     string action_meta = 4;
-    CreateApprovalStageRequest approval_stages = 5;
+    ApprovalStageRequest approval_stages = 5;
 }
 
-message CreateApprovalStageRequest {
+message ApprovalStageRequest {
     string stage_meta = 1;
 }
 
 message CreateResponse {
     int64 approval_queue_id = 1;
+}
+
+message UpdateRequest {
+    int64 approval_queue_id = 1;
+    string queue_name = 2;
+    string resource_id = 3;
+    string resource_type = 4;
+    string action_meta = 5;
+    ApprovalStageRequest approval_stages = 6;
+}
+
+message UpdateResponse {
+    bool success = 1;
 }
 
 message GetRequest {

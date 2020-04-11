@@ -14,6 +14,7 @@ type ApprovalQueueConfig struct {
 	MysqlPass       string `yaml:"mysql_pass"`
 	MysqlUser       string `yaml:"mysql_user"`
 	MysqlHost       string `yaml:"mysql_host"`
+	MysqlDb         string `yaml:"mysql_db"`
 	KafkaBrokerHost string `yaml:"kafka_broker_host"`
 	KafkaTopic      string `yaml:"kafka_topic"`
 }

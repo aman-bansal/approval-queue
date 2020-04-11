@@ -1,5 +1,7 @@
 package models
 
+import "context"
+
 type ApprovalQueue struct {
 	Id           int64           `json:"id"`
 	QueueName    string          `json:"queue_name"`
@@ -10,13 +12,6 @@ type ApprovalQueue struct {
 	Stages       []ApprovalStage `json:"stages"`
 }
 
-type ApprovalStage struct {
-	Id        int64  `json:"id"`
-	State     State  `json:"state"`
-	Comment   string `json:"comment"`
-	StageMeta string `json:"stage_meta"`
-}
-
 type State string
 
 const (
@@ -24,3 +19,23 @@ const (
 	APPROVED State = "APPROVED"
 	REJECT   State = "REJECT"
 )
+
+func (a *ApprovalQueue) Action(ctx context.Context, approvalStageId int64, action string) {
+	for _, stage := range a.Stages {
+		if stage.Id == approvalStageId {
+			stage.approve()
+		}
+	}
+
+}
+
+func (a *ApprovalQueue) GetQueueEvent() QueueEvent {
+	return QueueEvent{
+		State:           a.State,
+		ApprovalQueueId: a.Id,
+	}
+}
+
+func (a *ApprovalQueue) Evaluate(ctx context.Context) {
+
+}

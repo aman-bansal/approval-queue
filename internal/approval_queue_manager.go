@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/aman-bansal/approval-queue/config"
 	"github.com/aman-bansal/approval-queue/internal/impl"
-	proto_impl "github.com/aman-bansal/approval-queue/pkg/grpc"
-	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	protoimpl "github.com/aman-bansal/approval-queue/pkg/grpc"
+	grpcmiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
 	"net"
 )
@@ -18,14 +18,14 @@ func Init(ctx context.Context, appEnv string) error {
 
 	grpcServer := grpc.NewServer(
 		grpc.UnaryInterceptor(
-			grpc_middleware.ChainUnaryServer(
+			grpcmiddleware.ChainUnaryServer(
 				//todo add interceptor for authorization and authentication
 			),
 		),
 	)
 
 	controller := impl.NewApprovalQueueManager(conf)
-	proto_impl.RegisterApprovalQueueManagerServer(grpcServer, controller)
+	protoimpl.RegisterApprovalQueueManagerServer(grpcServer, controller)
 	lis, err := net.Listen("tcp", "0.0.0.0:80")
 	if err != nil {
 		return err
