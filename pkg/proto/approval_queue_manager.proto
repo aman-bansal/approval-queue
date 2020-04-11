@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "github.com/aman-bansal/go_approval_queue/pkg/grpc/approval_queue";
+option go_package = "github.com/aman-bansal/approval-queue/pkg/grpc";
 
 service ApprovalQueueManager {
     rpc Create (CreateRequest) returns (CreateResponse) {
@@ -86,14 +86,14 @@ message PaginationResponse {
     int64 size = 3;
 }
 enum ActionType {
-    UNDEFINED = 0;
+    ACTION_TYPE_UNDEFINED = 0;
     APPROVE = 1;
     REJECT = 2;
     SKIP = 3;
 }
 
 enum State {
-    UNDEFINED = 0;
+    STATE_UNDEFINED = 0;
     ASSIGNED = 1;
     APPROVED = 2;
     REJECTED = 3;
